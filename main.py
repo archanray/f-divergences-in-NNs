@@ -92,12 +92,7 @@ def main():
             tag_scalar_dict={"train/acc": train_acc, "val/acc": val_acc}, 
             global_step=epoch)
         
-        print(
-            f"Epoch: {epoch}| 
-            Train loss: {train_loss: .5f}| 
-            Train acc: {train_acc: .5f}| 
-            Val loss: {val_loss: .5f}| 
-            Val acc: {val_acc: .5f}")
+        print(f"Epoch: {epoch}| Train loss: {train_loss: .5f}| Train acc: {train_acc: .5f}| Val loss: {val_loss: .5f}| Val acc: {val_acc: .5f}")
     
 if __name__ == "__main__":
     main()
