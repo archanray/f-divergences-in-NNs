@@ -9,6 +9,7 @@ from torch.utils.tensorboard import SummaryWriter
 from datetime import datetime
 import os
 import argparse
+from utils.runner import train, validate
 
 def main(args):
     # uncomment to check model summary
@@ -45,22 +46,15 @@ def main(args):
     for epoch in tqdm(range(EPOCHS)):
         # Training loop
         train_loss, train_acc = 0.0, 0.0
-        for X, y in train_dataloader:
-            X, y = X.to(device), y.to(device)
-            
-            model_lenet5.train()
-            
-            y_pred = model_lenet5(X)
-            
-            loss = loss_fn(y_pred, y)
-            train_loss += loss.item()
-            
-            acc = accuracy(y_pred, y)
-            train_acc += acc
-            
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
+        
+        train_loss, train_acc, model_lenet5, loss, optimizer = train(
+            train_dataloader=train_dataloader,
+            model_lenet5=model_lenet5,
+            loss_fn=loss_fn,
+            optimizer=optimizer,
+            accuracy=accuracy,
+            device=device
+        )
             
         train_loss /= len(train_dataloader)
         train_acc /= len(train_dataloader)
@@ -94,7 +88,9 @@ def main(args):
             global_step=epoch)
         
         print(f"Epoch: {epoch}| Train loss: {train_loss: .5f}| Train acc: {train_acc: .5f}| Val loss: {val_loss: .5f}| Val acc: {val_acc: .5f}")
-    
+    writer.close()
+    return None
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Handle some inputs.')
     parser.add_argument('--batchsize', dest='BATCH_SIZE', type=int,
