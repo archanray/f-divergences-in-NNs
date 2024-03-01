@@ -6,5 +6,6 @@
 #SBATCH -G 2  # Number of GPUs
 #SBATCH -t 07:00:00  # Job time limit
 #SBATCH -o mnist.out  # %j = job ID
+#SBATCH -e mnist.err  # %j = job ID 
 
 python main.py
