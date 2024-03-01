@@ -6,7 +6,7 @@ class LeNet5(nn.Module):
         self.conv1 = nn.Conv2d(1, 6, kernel_size=5, padding=2) # 28*28->32*32-->28*28
         # self.batchnorm1 = nn.BatchNorm2d(6)
         self.tanh1 = nn.Tanh()
-        self.pool1 = nn.AvgPool2d(kernel_size=2, stride=2),  # 14*14
+        self.pool1 = nn.AvgPool2d(kernel_size=2, stride=2)  # 14*14
         
         self.conv2 = nn.Conv2d(6, 16, kernel_size=5, stride=1)  # 10*10
         #self.batchnorm2 = nn.BatchNorm2d(16)
