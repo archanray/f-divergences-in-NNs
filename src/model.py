@@ -12,7 +12,7 @@ class LeNet5(nn.Module):
         self.batchnorm2 = nn.BatchNorm2d(16)
         self.relu = nn.ReLU()
         self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.fc1 = nn.Linear(400, 120)
+        self.fc1 = nn.Linear(256, 120)
         self.relu3 = nn.ReLU()
         self.fc2 = nn.Linear(120, 84)
         self.relu4 = nn.ReLU()
