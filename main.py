@@ -46,37 +46,32 @@ def main(args):
     for epoch in tqdm(range(EPOCHS)):
         # Training loop
         train_loss, train_acc = 0.0, 0.0
-        
-        train_loss, train_acc, model_lenet5, loss, optimizer = train(
-            train_dataloader=train_dataloader,
-            model_lenet5=model_lenet5,
-            loss_fn=loss_fn,
-            optimizer=optimizer,
-            accuracy=accuracy,
-            device=device
-        )
+
+        # train model
+        train_loss, train_acc, model_lenet5, loss, optimizer = train (
+                                                                        train_dataloader=train_dataloader,
+                                                                        model_lenet5=model_lenet5,
+                                                                        loss_fn=loss_fn,
+                                                                        optimizer=optimizer,
+                                                                        accuracy=accuracy,
+                                                                        device=device,
+                                                                        train_loss=0,
+                                                                        train_acc=0
+                                                                    )
             
         train_loss /= len(train_dataloader)
         train_acc /= len(train_dataloader)
-            
-        # Validation loop
-        val_loss, val_acc = 0.0, 0.0
-        model_lenet5.eval()
-        with torch.inference_mode():
-            for X, y in val_dataloader:
-                X, y = X.to(device), y.to(device)
-                
-                y_pred = model_lenet5(X)
-                
-                loss = loss_fn(y_pred, y)
-                val_loss += loss.item()
-                
-                acc = accuracy(y_pred, y)
-                val_acc += acc
-                
-            val_loss /= len(val_dataloader)
-            val_acc /= len(val_dataloader)
-            
+
+        # validate model    
+        val_loss, val_acc = validate (
+                                        model_lenet5=model_lenet5, 
+                                        val_dataloader=val_dataloader, 
+                                        loss_fn=loss_fn, 
+                                        accuracy=accuracy, 
+                                        device=device
+                                    )
+        
+        # writer in the tensorboard    
         writer.add_scalars(
             main_tag="Loss", 
             tag_scalar_dict={"train/loss": train_loss, "val/loss": val_loss}, 

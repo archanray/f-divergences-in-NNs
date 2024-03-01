@@ -1,7 +1,7 @@
 import torch
 from tqdm.notebook import tqdm
 
-def train(train_dataloader=None, model_lenet5=None, loss_fn=None, optimizer=None, accuracy=None, device=None):
+def train(train_dataloader=None, model_lenet5=None, loss_fn=None, optimizer=None, accuracy=None, device=None, train_loss=0, train_acc=0):
     for X, y in train_dataloader:
         X, y = X.to(device), y.to(device)
         
@@ -22,6 +22,7 @@ def train(train_dataloader=None, model_lenet5=None, loss_fn=None, optimizer=None
     return train_loss, train_acc, model_lenet5, loss, optimizer
 
 def validate(model_lenet5=None, val_dataloader=None, loss_fn=None, accuracy=None, device=None):
+    val_loss, val_acc = 0.0, 0.0
     model_lenet5.eval()
     with torch.inference_mode():
         for X, y in val_dataloader:
