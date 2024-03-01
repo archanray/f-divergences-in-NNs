@@ -12,7 +12,7 @@ class LeNet5(nn.Module):
         #self.batchnorm2 = nn.BatchNorm2d(16)
         self.tanh2 = nn.Tanh()
         # self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
-        self.pool2 = nn.AvgPool2d(kernel_size=2, stride=2),  # 5*5
+        self.pool2 = nn.AvgPool2d(kernel_size=2, stride=2)  # 5*5
         
         self.flatten = nn.Flatten()
         self.fc1 = nn.Linear(in_features=16*5*5, out_features=120)
