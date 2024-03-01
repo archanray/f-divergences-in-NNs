@@ -5,6 +5,6 @@
 #SBATCH -p gpu  # Partition
 #SBATCH -G 2  # Number of GPUs
 #SBATCH -t 07:00:00  # Job time limit
-#SBATCH -o slurm-%j.out  # %j = job ID
+#SBATCH -o mnist.out  # %j = job ID
 
 python main.py
