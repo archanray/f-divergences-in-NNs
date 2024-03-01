@@ -28,7 +28,7 @@ def main():
 
     # device-agnostic setup
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model_lenet5 = model.to(device)
+    model_lenet5 = model().to(device)
 
     # set up loss function and optimizer
     loss_fn = nn.CrossEntropyLoss()
