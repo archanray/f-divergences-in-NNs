@@ -8,8 +8,9 @@ from tqdm.notebook import tqdm
 from torch.utils.tensorboard import SummaryWriter
 from datetime import datetime
 import os
+import argparse
 
-def main():
+def main(args):
     # uncomment to check model summary
     # summary(
     #     model=model_lenet5v1, 
@@ -37,9 +38,9 @@ def main():
     accuracy = accuracy.to(device)
 
     # set up the dataloaders
-    train_dataloader, val_dataloader, test_dataloader = Dataset(BATCH_SIZE=32)
+    train_dataloader, val_dataloader, test_dataloader = Dataset(BATCH_SIZE=args.BATCH_SIZE)
 
-    EPOCHS = 12
+    EPOCHS = args.EPOCHS
 
     for epoch in tqdm(range(EPOCHS)):
         # Training loop
@@ -95,4 +96,13 @@ def main():
         print(f"Epoch: {epoch}| Train loss: {train_loss: .5f}| Train acc: {train_acc: .5f}| Val loss: {val_loss: .5f}| Val acc: {val_acc: .5f}")
     
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Handle some inputs.')
+    parser.add_argument('--batchsize', dest='BATCH_SIZE', type=int,
+                        default=32,
+                        help='indicate batchsize')
+    parser.add_argument('--epochs', dest='EPOCHS', type=int,
+                        default=12,
+                        help='EPOCHS to train the model')
+
+    args = parser.parse_args()
+    main(args)
