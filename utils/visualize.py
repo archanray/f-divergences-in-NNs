@@ -24,10 +24,8 @@ def plot_data(data, labels, savedir="plots", dataset="mnist", iteration=0):
     savepath = os.path.join(savedir, dataset)
     if not os.path.isdir(savedir):
         os.makedirs(savepath)
-    plt.savefig(os.path.join(savepath, str(iteration)+"TSNE_plot.py"))
-    
+    plt.savefig(os.path.join(savepath, str(iteration)+"TSNE_plot.py"))    
     return None
-
 
 def plot_data_cuda(data, labels, savedir="plots", dataset="mnist", iteration=0):
     # need to handle data and labels into cpu later
@@ -38,7 +36,6 @@ def plot_data_cuda(data, labels, savedir="plots", dataset="mnist", iteration=0):
     # Create the figure
     fig = plt.figure( figsize=(8,8) )
     ax = fig.add_subplot(1, 1, 1, title='TSNE' )
-
     # Create the scatter
     ax.scatter(x=data[:,0], y=data[:,1], c=labels, cmap=plt.cm.get_cmap('Paired'),
                     alpha=0.4, s=0.5)
