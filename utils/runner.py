@@ -19,7 +19,8 @@ def train(train_dataloader=None, model_lenet5=None, loss_fn=None, optimizer=None
         loss.backward()
         optimizer.step()
             
-    return train_loss, train_acc, model_lenet5, loss, optimizer
+    # return train_loss, train_acc, model_lenet5, loss, optimizer
+    return train_loss, train_acc
 
 def validate(model_lenet5=None, val_dataloader=None, loss_fn=None, accuracy=None, device=None):
     val_loss, val_acc = 0.0, 0.0

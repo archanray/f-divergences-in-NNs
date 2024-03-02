@@ -2,31 +2,16 @@ import torch
 from torch import nn
 from src.model import LeNet5 as model
 from src.dataset_file import MNIST_dataset as Dataset
-from torchinfo import summary
 from torchmetrics import Accuracy
-from tqdm.notebook import tqdm
-from torch.utils.tensorboard import SummaryWriter
-from datetime import datetime
+from tqdm import tqdm
 import os
 import argparse
 from utils.runner import train, validate
+from utils.utilities import tensorWriter
 
 def main(args):
-    # uncomment to check model summary
-    # summary(
-    #     model=model_lenet5v1, 
-    #     input_size=(1, 1, 28, 28), 
-    #     col_width=20, 
-    #     col_names=['input_size', 'output_size', 'num_params', 'trainable'], 
-    #     row_settings=['var_names'], 
-    #     verbose=0)
-
-    # Experiment tracking
-    timestamp = datetime.now().strftime("%Y-%m-%d")
-    experiment_name = "MNIST"
-    model_name = "LeNet5"
-    log_dir = os.path.join("runs", timestamp, experiment_name, model_name)
-    writer = SummaryWriter(log_dir)
+    # Experiment tracker
+    writer = tensorWriter(experiment_name = "MNIST", model_name = "LeNet5", dir="runs")
 
     # device-agnostic setup
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -34,7 +19,7 @@ def main(args):
 
     # set up loss function and optimizer
     loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(params=model_lenet5.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam(params=model_lenet5.parameters(), lr=0.0005)
     accuracy = Accuracy(task='multiclass', num_classes=10)
     accuracy = accuracy.to(device)
 
@@ -46,29 +31,28 @@ def main(args):
     for epoch in tqdm(range(EPOCHS)):
         # Training loop
         train_loss, train_acc = 0.0, 0.0
-
         # train model
-        train_loss, train_acc, model_lenet5, loss, optimizer = train (
-                                                                        train_dataloader=train_dataloader,
-                                                                        model_lenet5=model_lenet5,
-                                                                        loss_fn=loss_fn,
-                                                                        optimizer=optimizer,
-                                                                        accuracy=accuracy,
-                                                                        device=device,
-                                                                        train_loss=0,
-                                                                        train_acc=0
-                                                                    )
+        train_loss, train_acc = train(
+                                    train_dataloader=train_dataloader,
+                                    model_lenet5=model_lenet5,
+                                    loss_fn=loss_fn,
+                                    optimizer=optimizer,
+                                    accuracy=accuracy,
+                                    device=device,
+                                    train_loss=0,
+                                    train_acc=0
+                                    )
             
         train_loss /= len(train_dataloader)
         train_acc /= len(train_dataloader)
 
         # validate model    
-        val_loss, val_acc = validate (
-                                        model_lenet5=model_lenet5, 
-                                        val_dataloader=val_dataloader, 
-                                        loss_fn=loss_fn, 
-                                        accuracy=accuracy, 
-                                        device=device
+        val_loss, val_acc = validate(
+                                    model_lenet5=model_lenet5, 
+                                    val_dataloader=val_dataloader, 
+                                    loss_fn=loss_fn, 
+                                    accuracy=accuracy, 
+                                    device=device
                                     )
         
         # writer in the tensorboard    
@@ -88,11 +72,11 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Handle some inputs.')
-    parser.add_argument('--batchsize', dest='BATCH_SIZE', type=int,
+    parser.add_argument('--batchsize', '-s', dest='BATCH_SIZE', type=int,
                         default=32,
                         help='indicate batchsize')
-    parser.add_argument('--epochs', dest='EPOCHS', type=int,
-                        default=12,
+    parser.add_argument('--epochs', '-e', dest='EPOCHS', type=int,
+                        default=20,
                         help='EPOCHS to train the model')
 
     args = parser.parse_args()

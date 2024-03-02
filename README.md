@@ -8,3 +8,6 @@ Comparing f-divergences for clustering objective
 4. tensorboard-pytorch
 5. tensorboard
 6. protobuf
+7. seaborn
+8. scikit-learn
+9. tsnecuda: url{https://github.com/CannyLab/tsne-cuda}
